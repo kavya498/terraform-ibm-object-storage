@@ -53,6 +53,7 @@ resource "ibm_resource_key" "cos_credentials" {
   name                 = local.key_name
   resource_instance_id = data.ibm_resource_instance.cos_instance.id
   role                 = local.role
+  parameters           = { "HMAC" = true }
 
   //User can increase timeouts
   timeouts {
