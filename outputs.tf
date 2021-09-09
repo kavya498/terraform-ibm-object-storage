@@ -42,3 +42,8 @@ output "label" {
   value       = var.label
   depends_on = [data.ibm_resource_instance.cos_instance]
 }
+
+output "type" {
+  description = "The type of the resource"
+  value       = null
+}
