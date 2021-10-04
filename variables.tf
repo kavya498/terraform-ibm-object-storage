@@ -1,3 +1,8 @@
+variable "ibmcloud_api_key" {
+  type        = string
+  description = "The IBM Cloud api token"
+}
+
 variable "resource_group_name" {
   type        = string
   description = "Resource group where the cluster has been provisioned."

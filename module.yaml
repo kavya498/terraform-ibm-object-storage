@@ -25,5 +25,7 @@ versions:
         output: name
     - name: name_prefix
       scope: global
+    - name: ibmcloud_api_key
+      scope: global
     - name: name
       scope: ignore
