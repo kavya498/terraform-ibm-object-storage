@@ -2,11 +2,18 @@ id: github.com/cloud-native-toolkit/terraform-ibm-object-storage
 name: ibm-object-storage
 alias: cos
 type: terraform
-description: |
-  Module to work with an IBM Cloud Object Storage instance. If the `provision` flag is true then an new instance
-  of IBM Cloud Object Storage is provisioned. Otherwise, the module will find an existing instance with the
-  provided name and create a credential. The name and id of the Object Storage instance as well as the name and id
-  of the credential instance are exported from the module for use by other modules.
+description: >
+  Module to work with an IBM Cloud Object Storage instance. If the `provision`
+  flag is true then an new instance
+
+  of IBM Cloud Object Storage is provisioned. Otherwise, the module will find an
+  existing instance with the
+
+  provided name and create a credential. The name and id of the Object Storage
+  instance as well as the name and id
+
+  of the credential instance are exported from the module for use by other
+  modules.
 tags:
   - tools
   - infrastructure
@@ -16,12 +23,88 @@ versions:
   - platforms: []
     providers:
       - name: ibm
-        source: "ibm-cloud/ibm"
+        source: ibm-cloud/ibm
     dependencies:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
+    variables:
+      - name: resource_group_name
+        type: string
+        description: Resource group where the cluster has been provisioned.
+        moduleRef:
+          id: resource_group
+          output: name
+      - name: resource_location
+        type: string
+        description: Geographic location of the resource (e.g. us-south, us-east)
+        default: global
+      - name: tags
+        type: list(string)
+        description: Tags that should be applied to the service
+        default: []
+      - name: name_prefix
+        type: string
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
+        scope: global
+      - name: plan
+        type: string
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
+        default: standard
+      - name: provision
+        type: bool
+        description: Flag indicating that cos instance should be provisioned
+        default: true
+      - name: name
+        type: string
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
+        scope: ignore
+      - name: label
+        type: string
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: cos
+    version: v4.0.1
+    outputs:
+      - name: id
+        description: The Object Storage instance id
+      - name: name
+        description: The Object Storage instance name
+      - name: crn
+        description: The crn of the Object Storage instance
+      - name: location
+        description: The Object Storage instance location
+      - name: key_name
+        description: The name of the credential provisioned for the Object Storage instance
+      - name: key_id
+        description: The name of the credential provisioned for the Object Storage instance
+      - name: service
+        description: The name of the key provisioned for the Object Storage instance
+      - name: label
+        description: The label used for the Object Storage instance
+      - name: type
+        description: The type of the resource
+  - platforms: []
+    providers:
+      - name: ibm
+        source: ibm-cloud/ibm
+    dependencies:
+      - id: resource_group
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -32,14 +115,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -53,7 +141,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -63,7 +153,10 @@ versions:
         optional: true
       - name: label
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
         default: cos
         optional: true
     version: v4.0.0
@@ -91,7 +184,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -102,8 +195,10 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: ibmcloud_api_key
         scope: global
@@ -112,8 +207,11 @@ versions:
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -127,7 +225,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -137,7 +237,10 @@ versions:
         optional: true
       - name: label
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
         default: cos
         optional: true
     version: v3.4.0
@@ -165,7 +268,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -176,14 +279,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -197,7 +305,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -207,7 +317,10 @@ versions:
         optional: true
       - name: label
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
         default: cos
         optional: true
     version: v3.3.3
@@ -235,7 +348,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -246,14 +359,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -267,7 +385,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -277,7 +397,10 @@ versions:
         optional: true
       - name: label
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
         default: cos
         optional: true
     version: v3.3.2
@@ -303,7 +426,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -314,14 +437,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -335,7 +463,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -345,7 +475,10 @@ versions:
         optional: true
       - name: label
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
         default: cos
         optional: true
     version: v3.3.0
@@ -371,7 +504,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -382,14 +515,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -403,7 +541,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -413,7 +553,10 @@ versions:
         optional: true
       - name: label
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
         default: cos
         optional: true
     version: v3.2.0
@@ -439,7 +582,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -450,14 +593,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -471,7 +619,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -500,7 +650,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -511,14 +661,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -532,7 +687,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -559,7 +716,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -570,14 +727,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -591,7 +753,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -618,7 +782,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -629,14 +793,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -650,7 +819,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -675,7 +846,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -693,13 +864,13 @@ versions:
         default: global
       - name: tags
         type: list(string)
-        default: ""
+        default: ''
       - name: plan
         type: string
         default: standard
       - name: provision
         type: string
-        default: "true"
+        default: 'true'
     version: v3.0.3
     outputs:
       - name: name
@@ -717,7 +888,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -728,14 +899,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -749,7 +925,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -774,7 +952,7 @@ versions:
       - id: resource_group
         refs:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
-            version: ">= 2.1.0"
+            version: '>= 2.1.0'
     variables:
       - name: resource_group_name
         moduleRef:
@@ -785,14 +963,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -806,7 +989,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -835,14 +1020,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -856,7 +1046,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -886,14 +1078,19 @@ versions:
       - name: name_prefix
         scope: global
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: name
         scope: ignore
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
       - name: resource_location
         type: string
@@ -907,7 +1104,9 @@ versions:
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -946,12 +1145,16 @@ versions:
         optional: true
       - name: name_prefix
         type: string
-        description: The prefix name for the service. If not provided it will default to the resource group name
-        default: ""
+        description: >-
+          The prefix name for the service. If not provided it will default to
+          the resource group name
+        default: ''
         optional: true
       - name: plan
         type: string
-        description: The type of plan the service instance should run under (lite or standard)
+        description: >-
+          The type of plan the service instance should run under (lite or
+          standard)
         default: standard
         optional: true
       - name: provision
@@ -959,6 +1162,11 @@ versions:
         description: Flag indicating that key-protect instance should be provisioned
       - name: name
         type: string
-        description: The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}
-        default: ""
+        description: >-
+          The name that should be used for the service, particularly when
+          connecting to an existing service. If not provided then the name will
+          be defaulted to {name prefix}-{service}
+        default: ''
         optional: true
+interfaces:
+  - github.com/cloud-native-toolkit/automation-modules#ibm-service
