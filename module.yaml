@@ -1,6 +1,8 @@
 name: ibm-object-storage
 alias: cos
 type: terraform
+interfaces:
+  - github.com/cloud-native-toolkit/automation-modules#ibm-service
 description: |
   Module to work with an IBM Cloud Object Storage instance. If the `provision` flag is true then an new instance
   of IBM Cloud Object Storage is provisioned. Otherwise, the module will find an existing instance with the
