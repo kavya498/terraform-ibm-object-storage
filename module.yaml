@@ -1,5 +1,6 @@
 name: ibm-object-storage
 alias: cos
+registryId: cloud-native-toolkit/object-storage/ibm
 type: terraform
 interfaces:
   - github.com/cloud-native-toolkit/automation-modules#ibm-service
