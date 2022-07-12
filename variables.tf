@@ -45,3 +45,10 @@ variable "label" {
   description = "The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}"
   default     = "cos"
 }
+
+variable "ibmcloud_api_key" {
+  type        = string
+  description = "The ibmcloud api key used to test that instance is ready"
+  sensitive   = true
+  default     = ""
+}

@@ -61,3 +61,22 @@ resource "ibm_resource_key" "cos_credentials" {
     delete = "15m"
   }
 }
+
+module "clis" {
+  source = "cloud-native-toolkit/clis/util"
+  version = "1.16.2"
+
+  clis = ["jq"]
+}
+
+data external instance {
+  program = ["bash", "${path.module}/scripts/wait-for-instance.sh"]
+
+  query = {
+    bin_dir = module.clis.bin_dir
+    ibmcloud_api_key = var.ibmcloud_api_key
+    id = data.ibm_resource_instance.cos_instance.id
+    name = data.ibm_resource_instance.cos_instance.name
+    guid = data.ibm_resource_instance.cos_instance.guid
+  }
+}

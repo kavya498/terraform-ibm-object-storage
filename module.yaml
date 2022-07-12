@@ -33,3 +33,5 @@ versions:
       scope: global
     - name: name
       scope: ignore
+    - name: ibmcloud_api_key
+      scope: global

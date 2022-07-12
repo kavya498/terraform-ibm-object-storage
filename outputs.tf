@@ -1,23 +1,25 @@
 output "id" {
   description = "The Object Storage instance id"
-  value       = data.ibm_resource_instance.cos_instance.id
+  value       = data.external.instance.result.id
+  depends_on  = [ibm_resource_key.cos_credentials]
 }
 
 output "name" {
   description = "The Object Storage instance name"
-  value       = local.name
-  depends_on  = [data.ibm_resource_instance.cos_instance]
+  value       = data.external.instance.result.name
+  depends_on  = [ibm_resource_key.cos_credentials]
 }
 
 output "crn" {
   description = "The crn of the Object Storage instance"
-  value       = data.ibm_resource_instance.cos_instance.id
+  value       = data.external.instance.result.id
+  depends_on  = [ibm_resource_key.cos_credentials]
 }
 
 output "location" {
   description = "The Object Storage instance location"
   value       = var.resource_location
-  depends_on  = [data.ibm_resource_instance.cos_instance]
+  depends_on  = [ibm_resource_key.cos_credentials]
 }
 
 output "key_name" {
@@ -34,13 +36,13 @@ output "key_id" {
 output "service" {
   description = "The name of the key provisioned for the Object Storage instance"
   value       = local.service
-  depends_on = [data.ibm_resource_instance.cos_instance]
+  depends_on  = [ibm_resource_key.cos_credentials]
 }
 
 output "label" {
   description = "The label used for the Object Storage instance"
   value       = var.label
-  depends_on = [data.ibm_resource_instance.cos_instance]
+  depends_on  = [ibm_resource_key.cos_credentials]
 }
 
 output "type" {
