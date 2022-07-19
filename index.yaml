@@ -30,6 +30,119 @@ versions:
           - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
             version: '>= 2.1.0'
     variables:
+    - name: resource_group_name
+      type: string
+      description: Resource group where the cluster has been provisioned.
+      moduleRef:
+        id: resource_group
+        output: name
+      secure: false
+      source: data.ibm_resource_group.resource_group
+      attributeName: name
+      optional: true
+      computed: true
+      CloudDataType: ResourceGroup
+    - name: resource_location
+      type: string
+      description: Geographic location of the resource (e.g. us-south, us-east)
+      default: global
+      secure: false
+      source: ibm_resource_instance.cos_instance
+      attributeName: location
+      required: true
+      immutable: true
+      CloudDataType: Region
+    - name: tags
+      type: list(string)
+      description: Tags that should be applied to the service
+      default: []
+      scope: global
+      secure: false
+      source: local.tags
+    - name: name_prefix
+      type: string
+      description: >-
+        The prefix name for the service. If not provided it will default to
+        the resource group name
+      default: ''
+      scope: global
+      secure: false
+      source: local.name_prefix
+    - name: plan
+      type: string
+      description: >-
+        The type of plan the service instance should run under (lite or
+        standard)
+      default: standard
+      secure: false
+      source: ibm_resource_instance.cos_instance
+      attributeName: plan
+      required: true
+    - name: provision
+      type: bool
+      description: Flag indicating that cos instance should be provisioned
+      default: true
+      secure: false
+      source: ibm_resource_instance.cos_instance
+      attributeName: count
+    - name: name
+      type: string
+      description: >-
+        The name that should be used for the service, particularly when
+        connecting to an existing service. If not provided then the name will
+        be defaulted to {name prefix}-{service}
+      default: ''
+      scope: ignore
+      secure: false
+      - source: local.name
+    - name: label
+      type: string
+      description: >-
+        The name that should be used for the service, particularly when
+        connecting to an existing service. If not provided then the name will
+        be defaulted to {name prefix}-{service}
+      default: cos
+      secure: false
+      source: local.name
+    - name: ibmcloud_api_key
+      type: string
+      description: The ibmcloud api key used to test that instance is ready
+      sensitive: true
+      default: ''
+      scope: global
+      secure: true
+      source: data.external.instance
+      attributeName: query['ibmcloud_api_key']
+    version: v4.0.6
+    outputs:
+      - name: id
+        description: The Object Storage instance id
+      - name: name
+        description: The Object Storage instance name
+      - name: crn
+        description: The crn of the Object Storage instance
+      - name: location
+        description: The Object Storage instance location
+      - name: key_name
+        description: The name of the credential provisioned for the Object Storage instance
+      - name: key_id
+        description: The name of the credential provisioned for the Object Storage instance
+      - name: service
+        description: The name of the key provisioned for the Object Storage instance
+      - name: label
+        description: The label used for the Object Storage instance
+      - name: type
+        description: The type of the resource
+  - platforms: []
+    providers:
+      - name: ibm
+        source: ibm-cloud/ibm
+    dependencies:
+      - id: resource_group
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ibm-resource-group
+            version: '>= 2.1.0'
+    variables:
       - name: resource_group_name
         type: string
         description: Resource group where the cluster has been provisioned.
